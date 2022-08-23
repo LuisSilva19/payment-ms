@@ -18,7 +18,4 @@ public class PaymentDTO {
     private Status status;
     private Integer orderId;
     private Integer formOfPayment;
-    private String test;
-    private String test1;
-    private String test2;
 }

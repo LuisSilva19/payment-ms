@@ -22,10 +22,6 @@ import java.net.URI;
 public class PaymentController {
 
     private final PaymentService paymentService;
-//    private final Environment environment;
-
-//    @Value("${server.port}")
-//    int port;
 
     @GetMapping
     public Page<PaymentDTO> listPayment(@PageableDefault (size = 10) Pageable page){
