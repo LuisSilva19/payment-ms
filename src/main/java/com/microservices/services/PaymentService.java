@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,16 +53,21 @@ public class PaymentService {
         paymentRepository.deleteById(id);
     }
 
-    public void alteraStatus(Integer id) {
-        Optional<Payment> payment = paymentRepository.findById(id);
+    public void confirmStatus(Integer id) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException());
 
-        if (!payment.isPresent()) {
-            throw new EntityNotFoundException();
-        }
+        payment.setStatus(Status.CONFIRMED);
+        paymentRepository.save(payment);
 
-        payment.get().setStatus(Status.CONFIRMED);
-        paymentRepository.save(payment.get());
+        orderCLient.approvePaymentOrder(payment.getId());
+    }
 
-        orderCLient.updateOrder(payment.get().getId());
+    public void confirmStatus(Integer id, Status status) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() ->new EntityNotFoundException());
+
+        payment.setStatus(status);
+        paymentRepository.save(payment);
     }
 }

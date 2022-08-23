@@ -1,2 +1,2 @@
 # payment-ms
-java 17, stack Spring, flyway, modelmapper, docker, maven, feigh, netflix, postgresql
+Java 17, stack Spring, flyway, modelmapper, docker, maven, feigh, netflix, postgresql, resilience4j

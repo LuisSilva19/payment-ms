@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface OrderClient {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/order/{id}/paid")
-    void updateOrder(@PathVariable("id") Integer id);
+    void approvePaymentOrder(@PathVariable("id") Integer id);
 }

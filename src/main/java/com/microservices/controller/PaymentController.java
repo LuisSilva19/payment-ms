@@ -1,10 +1,11 @@
 package com.microservices.controller;
 
 import com.microservices.dto.PaymentDTO;
+import com.microservices.enums.Status;
 import com.microservices.services.PaymentService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -56,5 +57,15 @@ public class PaymentController {
     public ResponseEntity<PaymentDTO> deletePayment(@PathVariable("id") Integer id){
         paymentService.deletePayment(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/confirm")
+    @CircuitBreaker(name = "updateOrder", fallbackMethod = "authorizedPaymentWithPendingIntegration")
+    public void confirmPayment(@PathVariable("id") Integer id){
+        paymentService.confirmStatus(id);
+    }
+
+    public void authorizedPaymentWithPendingIntegration(Integer id, Exception e){
+        paymentService.confirmStatus(id, Status.CONFIRMED_WITHOUT_INTEGRATION);
     }
 }
